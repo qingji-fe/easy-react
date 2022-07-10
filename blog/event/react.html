@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="./react.development.js"></script>
+  <script src="./react-dom.development.js"></script>
+  <script src="./babel.js"></script>
+  <script type="text/babel">
+
+    //development
+    // production
+   
+    class MyModal extends React.Component {
+      state = {
+        isShow: false
+      }
+      componentDidMount() {
+        document.addEventListener('click', () => {
+          this.setState({
+            isShow: false
+          })
+        })
+      }
+
+      handleClickButton = (event) => {
+           event.stopPropagation()
+          // event.nativeEvent.stopPropagation()
+        // event.nativeEvent.stopImmediatePropagation()
+        this.setState({
+          isShow: true
+        })
+      }
+
+      render() {
+        return (
+          <div>
+            <button onClick={this.handleClickButton}>按钮</button>
+
+            {this.state.isShow && (
+              <div onClick={(event)=>event.nativeEvent.stopImmediatePropagation()}>我是弹窗</div>
+            )}
+          </div>
+        )
+      }
+    }
+    const domContainer = document.getElementById('root');
+    ReactDOM.render(React.createElement(MyModal), domContainer);
+  </script>
+  
+</body>
+</html>
