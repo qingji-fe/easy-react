@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .action {
+    margin-top: 50px;
+  }
+</style>
+<body>
+  <div id="root">初始化</div>
+
+
+  <div class="action">
+    <h4>操作区</h4>
+    <div>
+      <a href="/one" id="ahref">a标签点击</a>
+    </div>
+    <div>
+      <div>
+        浏览器前进后退 onpopstate事件监听
+      </div>
+     
+    </div>
+    <div>
+      <div>
+        脚本实现pushState  replaceState
+      </div>
+     
+    </div>
+  </div>
+  <script>
+    // hash模式下的 hashcahnge监听
+    /*
+      var root = document.getElementById('root')
+      window.addEventListener('hashchange', ()=> {
+    
+        const {hash} = window.location
+        console.log("结果", hash)
+        // 在控制台使用window.location.hash  = '#/one'
+        switch (hash){
+          case '#/one':
+            root.innerHTML = 'one'
+            return
+          case '#/two':
+            root.innerHTML = 'two'
+            return
+          default:
+            return
+        }
+      })
+    */
+
+    // history模式下的 模拟路由变换
+    function onpopState() {
+      const {search} = window.location
+      console.log("结果", window.location)
+      switch (search){
+          case '?/one':
+            root.innerHTML = 'one'
+            return
+          case '?/two':
+            root.innerHTML = 'two'
+            return
+          default:
+          root.innerHTML = '初始化'
+            return
+        }
+    }
+    var root = document.getElementById('root')
+    var ahref = document.getElementById('ahref')
+
+    // 点击a标签
+    ahref.addEventListener('click', (e)=> {
+      e.preventDefault() // 阻止默认行为
+      const href = ahref.getAttribute('href')
+      window.history.pushState({}, '', `?${href}`) // 改变历史记录栈
+      onpopState()
+    })
+
+    // 浏览器前进后退
+    window.addEventListener('popstate', onpopState)    
+
+  </script>
+  
+</body>
+</html>
