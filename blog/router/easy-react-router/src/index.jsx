@@ -5,9 +5,7 @@ import {
   Switch
 } from './easy-router';
 
-
-
-import { Link, BrowserRouter } from './easy-router-dom';
+import { Link, BrowserRouter, HashRouter } from './easy-router-dom';
 
 const App =() => {
   return (
@@ -17,12 +15,14 @@ const App =() => {
       <div><Link to="/home2">首页2</Link></div>
 
 
-
+{/* 
       <Route path="/home1" component={()=>"首页1"} />
-      <Route path="/home2" component={()=>"首页2"} />
-      {/* <Switch> */}
-        {/* <Route path="/home1" component={Home} /> */}
-      {/* </Switch> */}
+      <Route path="/home2" component={()=>"首页2"} /> */}
+
+      <Switch>
+        <Route path="/home1" component={()=>"首页1"} />
+        <Route path="/home2" component={()=>"首页2"} />
+      </Switch> 
     </BrowserRouter>
   )
 }

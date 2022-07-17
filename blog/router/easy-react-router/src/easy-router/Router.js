@@ -6,8 +6,16 @@ const Router = (props) => {
   const [location, setLocation] = useState(history.location);
 
   console.log("propsprops", props);
-  history.listen((location) => {
-    setLocation(location);
+
+  useEffect(() => {
+    const unlisten = history.listen((location) => {
+      console.log("变换location", location);
+      setLocation(location);
+    });
+    return () => {
+      console.log("卸载");
+      unlisten();
+    };
   });
 
   return (

@@ -8,7 +8,6 @@ const Switch = ({ children }) => {
   return (
     <RouterContext.Consumer>
       {(context) => {
-        console.log("托管人为", context);
         const { location } = context;
         let dom = null;
         React.Children.forEach(children, (child) => {

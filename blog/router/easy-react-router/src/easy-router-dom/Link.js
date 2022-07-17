@@ -15,7 +15,6 @@ const Link = (props) => {
     <RouterContext.Consumer>
       {(context) => {
         const { history } = context;
-
         const location = createLocation(to);
         const href = "#" + location.pathname;
         console.log("contextcontext", props, context, href);

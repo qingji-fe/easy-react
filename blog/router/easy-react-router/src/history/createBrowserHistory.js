@@ -1,58 +1,58 @@
 import { createLocation, getDOMLocation, getHashPath } from "./util";
 
-function createBrowserHistory(props) {
+function createBrowserHistory() {
   let listeners = [];
-  console.log("按时发顺丰撒女", listeners);
-  const globalHistory = window.history;
   let history = {};
-  function handlePopState() {
-    console.log("handlePopState...");
+  const globalHistory = window.history;
+
+  // 通知更新
+  const setStateNoticeUpdate = (nextState) => {
+    Object.assign(history, nextState) // 合并到history上 action动作
+    history.length = globalHistory.length
+    console.log("各地,", listeners, history)
+    listeners.forEach(fn=> {
+      fn.apply(null, [history.location, history.action]);
+    })
+  }
+  // link点击的push
+  const push =(path) => {
+    globalHistory.pushState({}, null, path);
+    setStateNoticeUpdate({
+      action: "PUSH",
+      location: createLocation(path),
+    })
+  }
+
+  // 浏览器前进后退
+  const handlePopState = () => {
     const location = getDOMLocation();
-    console.log("前进后退..");
-    const action = "POP";
-    setState({
-      action,
+    console.log("办公费location", location)
+    setStateNoticeUpdate({
+      action: "POP",
       location,
     });
   }
-  function setState(nextState) {
-    history = {
-      ...history,
-      action: nextState.action,
-      location: nextState.location,
-    };
-    listeners.forEach((fn) => {
-      fn.apply(void 0, [history.location, history.action]);
-    });
-  }
-  function listen(listener) {
+
+  // 监听listeners变换
+  const listen =(listener) => {
     listeners.push(listener);
-    if (listeners.length === 1) {
+    // 刚开始
+    if(listeners.length === 1){
       window.addEventListener("popstate", handlePopState);
     }
-    return function () {
-      console.log("取消监听。。");
-      listeners = listeners.filter((item) => item !== listener);
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }
-  function push(path) {
-    console.log("push...", path);
-    globalHistory.pushState({}, null, path);
-    setState({
-      action: "PUSH",
-      location: createLocation(path),
-    });
-  }
-  const path = getHashPath();
-  const initialLocation = createLocation(path);
 
+    return ()=> {
+      listeners = listeners.filter(item => item !== listener)
+      window.removeEventListener('popstate', handlePopState);
+    }
+  }
+
+  const path = getHashPath()
   history = {
-    action: "POP",
-    listen,
     push,
-    location: initialLocation,
-  };
+    location:createLocation(path),
+    listen
+  }
   return history;
 }
 
